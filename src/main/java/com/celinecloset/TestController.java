@@ -10,7 +10,7 @@ public class TestController {
     public UserDto test() {
         UserDto userDto = new UserDto();
         userDto.setAge(20);
-        userDto.setName("hoon");
+        userDto.setName("joon");
 
         return userDto;
     }
