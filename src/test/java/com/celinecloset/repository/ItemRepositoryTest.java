@@ -10,12 +10,22 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.celinecloset.entity.QItem;
+import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManager;
+
+
 // 쿼리 메소드 추가
 import java.util.List;
 
 @SpringBootTest
 @TestPropertySource(locations="classpath:application-test.properties")
 class ItemRepositoryTest {
+
+    @PersistenceContext
+    EntityManager em;
 
     @Autowired
     ItemRepository itemRepository;
@@ -106,6 +116,24 @@ itemRepository.findByPriceLessThanOrderByPriceDesc(10005);
         this.createItemList();
         List<Item> itemList =
                 itemRepository.findByItemDetailByNative("테스트 상품 상세 설명");
+        for(Item item : itemList){
+            System.out.println(item.toString());
+        }
+    }
+
+    @Test
+    @DisplayName("Querydsl 조회테스트1")
+    public void queryDslTest(){
+        this.createItemList();
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        QItem qItem = QItem.item;
+        JPAQuery<Item> query = queryFactory.selectFrom(qItem)
+                .where(qItem.itemSellStatus.eq(ItemSellStatus.SELL))
+                .where(qItem.itemDetail.like("%" + "테스트 상품 상세 설명" + "%"))
+                .orderBy(qItem.price.desc());
+
+        List<Item> itemList = query.fetch();
+
         for(Item item : itemList){
             System.out.println(item.toString());
         }
