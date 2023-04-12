@@ -5,11 +5,12 @@ import com.celinecloset.entity.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
@@ -36,7 +37,7 @@ public class MemberServiceTest {
     @DisplayName("회원가입 테스트")
     public void saveMemberTest(){
         Member member = createMember();
-        Member saveMember = memberService.saveMember(member);
+        Member savedMember = memberService.saveMember(member);
 
         assertEquals(member.getEmail(), savedMember.getEmail());
         assertEquals(member.getName(), savedMember.getName());
