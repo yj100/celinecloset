@@ -2,7 +2,10 @@ package com.celinecloset.controller;
 
 import com.celinecloset.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,5 +52,22 @@ public class ItemController {
         model.addAttribute("itemFormDto", new ItemFormDto());
         return "/item/itemForm";
     }
+
+    @GetMapping(value = "/admin/item/{itemId}")
+    public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
+
+        try {
+            ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+            model.addAttribute("itemFormDto", itemFormDto);
+        } catch(EntityNotFoundException e){
+            model.addAttribute("errorMessage", "존재하지 않는 상품 입니다.");
+            model.addAttribute("itemFormDto", new ItemFormDto());
+            return "item/itemForm";
+        }
+
+        return "item/itemForm";
+
+    }
+
 
 }
