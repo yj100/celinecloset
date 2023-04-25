@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.celinecloset.dto.MainItemDto;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -87,5 +89,9 @@ public class ItemService {
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
+        return itemRepository.getMainItemPage(itemSearchDto, pageable);
+    }
 
 }
