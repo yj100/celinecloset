@@ -90,12 +90,12 @@ public class OrderServiceTest {
         orderDto.setItemId(item.getId());
         Long orderId = orderService.order(orderDto, member.getEmail());
 
-        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
         orderService.cancelOrder(orderId);
 
         assertEquals(OrderStatus.CANCEL, order.getOrderStatus());
         assertEquals(100, item.getStockNumber());
-
     }
 
 }
