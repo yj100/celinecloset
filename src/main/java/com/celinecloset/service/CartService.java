@@ -1,5 +1,6 @@
 package com.celinecloset.service;
 
+import com.celinecloset.dto.CartDetailDto;
 import com.celinecloset.dto.CartItemDto;
 import com.celinecloset.entity.Cart;
 import com.celinecloset.entity.CartItem;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +52,23 @@ public class CartService {
             return cartItem.getId();
         }
     }
+
+    @Transactional(readOnly = true)
+    public List<CartDetailDto> getCartList(String email){
+
+        List<CartDetailDto> cartDetailDtoList = new ArrayList<>();
+
+        Member member = memberRepository.findByEmail(email);
+        Cart cart = cartRepository.findByMemberId(member.getId());
+        if(cart == null){
+            return cartDetailDtoList;
+        }
+
+        cartDetailDtoList = cartItemRepository.findCartDetailDtoList(cart.getId());
+
+        return cartDetailDtoList;
+
+    }
+
 }
 
